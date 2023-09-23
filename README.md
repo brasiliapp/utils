@@ -2,12 +2,21 @@
 
 Este repositório contém utilitários e funções de web scraping para coletar dados relacionados aos deputados federais na Câmara dos Deputados do Brasil. Essas ferramentas podem ser usadas para extrair as mais diversas informações que não estão disponíveis na api da câmara, ou que não estão estruturada de uma forma organizada.
 
+As informações não disponíveis na API da câmara são estraídas do site oficial do Câmara dos Deputados (https://www.camara.leg.br/)
+
+Se você tiver de alguma outra informação que esteja disponível lá, abra uma issue.
+
 ## Funcionalidades
 
 [extract_gabinet_data.py](./extract_gabinet_data.py)
 - [x] Coleta dos gastos mensais da verba de cabineta de um/a parlamentar.
 - [x] Coleta dos secretários ativos do gabinete de um/a parlamentar.
 - [x] Coleta dos secretários inativos do gabinete de um/a parlamentar.
+- [] Coletar o salário de cada secretário.
+
+[extract_speeches.py](./extract_speeches.py)
+- [x] Coleta eventos e gravações de fala do parlamentar.
+- [] Armazenar em núvem os arquivos para não depender da disponibilidade da cloud da câmara.
 
 ## Modo de Uso
 
