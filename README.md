@@ -47,7 +47,8 @@ Gostaríamos muito da sua ajuda para melhorar este projeto. Se você deseja cont
 
 ## Comunidade
 
-Participe da nossa comunidade no Discord para discussões, feedback e suporte:
+Participe da nossa [comunidade no discord](https://discord.gg/Udb7ZTac9F) para discussões, feedback e suporte:
 
-[![Discord](https://img.shields.io/discord/1093339200453103656?color=7389D8&label=Discord&logo=discord&logoColor=white)]([https://discord.gg/1093339200453103656](https://discord.gg/Udb7ZTac9F)https://discord.gg/1093339200453103656)
+
+
 
