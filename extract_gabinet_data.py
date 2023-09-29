@@ -5,6 +5,7 @@ from urllib.parse import quote
 import json
 from unidecode import unidecode
 import datetime
+from decimal import Decimal
 
 
 def print_timestamped_message(message):
@@ -29,7 +30,6 @@ def fetch_expenses_data(url_presence):
         return None
     return BeautifulSoup(response_deputado.text, 'html.parser')
 
-
 def extract_table_data(soup):
     table = soup.select_one("#main-content > section > div > table")
     if not table:
@@ -48,6 +48,27 @@ def extract_table_data(soup):
         })
     return results
 
+def fetch_monthly_salary(base_url, deputado_id):
+    year = datetime.datetime.now().date().strftime("%Y")
+    salary_url = f"{base_url}/{deputado_id}/remuneracao?ano={year}"
+    response_salary = requests.get(salary_url)
+    if response_salary.status_code != 200:
+        print_timestamped_message(f"Error fetching {year} salary for deputado with ID {deputado_id}")
+        return None
+    soup = BeautifulSoup(response_salary.text, 'html.parser')
+    monthly_salaries = soup.find_all('tr')
+
+    if len(monthly_salaries) > 0:
+        try:
+            latest_monthly_salary = Decimal(monthly_salaries[-1].find('a').text.strip().replace(".", "").replace(",", "."))
+
+            return f"R$ {latest_monthly_salary:,.2f}".replace(".","%").replace(",",".").replace("%",",")
+        except:
+            print_timestamped_message(f"Error reading {year} monthly salary for deputado with ID {deputado_id}")
+            return None
+    else:
+        print_timestamped_message(f"Error parsing {year} monthly salary for deputado with ID {deputado_id}")
+        return None
 
 def fetch_and_extract_secretaries_data(new_link):
     response_new_link = requests.get(new_link)
@@ -127,9 +148,12 @@ for deputado in active_deputados[skipDeputados:]:
     else:
         active_secretaries, inactive_secretaries = None, None
 
+    print_timestamped_message("Extracting salary data...")
+    salary = fetch_monthly_salary("https://www.camara.leg.br/deputados", deputado['id'])
+
     result = {
         'deputado': deputado['nome'],
-        "salary": 'R$ 41.650,92',
+        "salary": salary,
         'id': deputado['id'],
         'montly_expenses': results,
         'active_secretaries': active_secretaries if active_secretaries is not None else None,
