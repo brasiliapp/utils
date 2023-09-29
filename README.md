@@ -12,6 +12,7 @@ Se você tiver de alguma outra informação que esteja disponível lá, abra uma
 - [x] Coleta dos gastos mensais da verba de cabineta de um/a parlamentar.
 - [x] Coleta dos secretários ativos do gabinete de um/a parlamentar.
 - [x] Coleta dos secretários inativos do gabinete de um/a parlamentar.
+- [x] Coletar o salário de cada deputado.
 - [ ] Coletar o salário de cada secretário.
 
 [extract_speeches.py](./extract_speeches.py)
