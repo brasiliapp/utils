@@ -38,7 +38,9 @@ Certifique-se de ter as seguintes dependências instaladas:
    ```bash
    cd utils
 
-3. Instale as dependências
+3. Instale as dependências rodando o seguinte comando dentro do repositório:
+   ```bash
+   pip3 install -r requirements.txt
 
 4. Execute o script
    ```bash

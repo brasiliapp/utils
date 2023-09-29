@@ -1,0 +1,5 @@
+# Exclude files from the build
+gabinete/
+
+# Exclude virtual env folder
+venv/
