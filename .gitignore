@@ -3,3 +3,6 @@ gabinete/
 
 # Exclude virtual env folder
 venv/
+
+#Exclude pycache
+__pycache__/
