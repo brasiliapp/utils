@@ -1,7 +1,5 @@
 import os
 import requests
-from bs4 import BeautifulSoup
-from urllib.parse import quote
 import json
 from unidecode import unidecode
 import datetime
@@ -34,8 +32,7 @@ client = DeputadoClient()
 
 # Note: I'm keeping your limit of 1 for testing purposes
 for deputado in active_deputados[skipDeputados:]:
-    log(
-        f"Processing data for deputado: {deputado['nome']}...")
+    log(f"Processing data for deputado: {deputado['nome']}...")
 
     log("Fetching expenses data...")
     soup, results = client.fetch_expenses_data(deputado['id'])
