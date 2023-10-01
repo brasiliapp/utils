@@ -7,6 +7,7 @@ from unidecode import unidecode
 import datetime
 from decimal import Decimal
 from logger import log
+from model.deputado import Deputado
 
 
 def get_active_deputados(deputados_url):
@@ -121,8 +122,7 @@ skipDeputados = 150
 for deputado in active_deputados[skipDeputados:]:
     log(
         f"Processing data for deputado: {deputado['nome']}...")
-    nome_deputado = unidecode(deputado['nome'])
-    nome_deputado_url = quote(nome_deputado, safe='')
+
     url_presence = f"https://www.camara.leg.br/deputados/{deputado['id']}/verba-gabinete?ano=2023"
 
     log("Fetching expenses data...")
@@ -144,21 +144,14 @@ for deputado in active_deputados[skipDeputados:]:
     log("Extracting salary data...")
     salary = fetch_monthly_salary("https://www.camara.leg.br/deputados", deputado['id'])
 
-    result = {
-        'deputado': deputado['nome'],
-        "salary": salary,
-        'id': deputado['id'],
-        'montly_expenses': results,
-        'active_secretaries': active_secretaries if active_secretaries is not None else None,
-        'inactive_secretaries': inactive_secretaries if inactive_secretaries is not None else None,
-        'built_by': 'BrasiliApp - https://brasiliapp.com.br',
-        'last_update': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    }
+    deputado = Deputado(deputado['id'], unidecode(deputado['nome']), salary, results, active_secretaries, inactive_secretaries, datetime.datetime.now())
+
+    result = deputado.to_json()
 
     # For testing
-    json_filename = f'gabinete/{nome_deputado.replace(" ", "-").lower()}-{deputado["id"]}.json'
+    json_filename = f'gabinete/{deputado.name.replace(" ", "-").lower()}-{deputado.id}.json'
     with open(json_filename, 'w', encoding='utf-8') as f:
         json.dump(result, f, ensure_ascii=False, indent=4)
-    log(f"Data for deputado {deputado['nome']} saved!")
+    log(f"Data for deputado {deputado.name} saved!")
 
 log("All tasks completed.")
