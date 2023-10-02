@@ -9,7 +9,7 @@ class Deputado:
         self.timestamp = timestamp
 
     def to_json(self):
-        {
+        return {
             'id': self.id,
             'deputado': self.name,
             'salary': self.salary if self.salary is not None else 'R$ 41.650,92',
