@@ -6,3 +6,6 @@ venv/
 
 #Exclude pycache
 __pycache__/
+
+# Exclude environment files
+.env
