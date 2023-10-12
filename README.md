@@ -42,6 +42,10 @@ Certifique-se de ter as seguintes dependências instaladas:
    ```bash
    pip3 install -r requirements.txt
 
+4. Adicione o arquivo com as variáveis de ambiente do script. Ele deve se chamar `.env`, use como base o arquivo `.env.example`:
+   ```bash
+   cp .env.example .env
+   ```
 4. Execute o script
    ```bash
    python3 extract_gabinet_data.py

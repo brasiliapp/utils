@@ -5,6 +5,8 @@ import json
 from datetime import datetime
 import os
 import gc
+from constants import DEPUTY_DATA_ENDOINT, LEGISLATURE_ID, FINAL_DATE_DEPUTY_SPEECH_SEARCH, \
+    DEPUTY_TO_SKIP_SPEECH_DATA, INITIAL_DATE_DEPUTY_SPEECH_SEARCH
 
 # Function to print a timestamped message
 def print_timestamped_message(message):
@@ -12,9 +14,11 @@ def print_timestamped_message(message):
     formatted_time = current_time.strftime("%d/%m/%Y %H:%M:%S")
     print(f"[{formatted_time}] {message}")
 
+
 # Check if the 'speechs' directory exists and create it if not
 if not os.path.exists('speechs'):
     os.makedirs('speechs')
+
 
 def extrair_mp4_url(url):
     print_timestamped_message(f"Buscando MP4 na URL: {url}")
@@ -28,6 +32,7 @@ def extrair_mp4_url(url):
             return src_attribute
     print("não encontrou atributo")
     return None
+
 
 def extrair_links_de_video(url, nome_deputado):
     response = requests.get(url)
@@ -45,20 +50,21 @@ def extrair_links_de_video(url, nome_deputado):
 
     return video_params
 
-idLegislatura = 57
-deputados_url = f"https://dadosabertos.camara.leg.br/api/v2/deputados?idLegislatura={idLegislatura}&itens=1000&ordem=ASC&ordenarPor=nome"
+
+deputados_url = f"{DEPUTY_DATA_ENDOINT}?idLegislatura={LEGISLATURE_ID}&itens=1000&ordem=ASC&ordenarPor=nome"
 response = requests.get(deputados_url)
 deputados_data = response.json()
 nomes_deputados = [deputado['nome'] for deputado in deputados_data['dados']]
 
-#for testing
-skipDeputados = 2
+# for testing
+skipDeputados = DEPUTY_TO_SKIP_SPEECH_DATA
 
 for deputado in deputados_data['dados'][skipDeputados:]:
     nome_deputado = deputado['nome']
     nome_deputado_url = quote(nome_deputado, safe='')
 
-    url_deputado = f"https://www2.camara.leg.br/atividade-legislativa/webcamara/arquivos/resultadoPeriodoDep?dep={nome_deputado_url}&dataInicio=01/01/2023&dataFim=31/12/2023"
+    url_deputado = \
+        f"https://www2.camara.leg.br/atividade-legislativa/webcamara/arquivos/resultadoPeriodoDep?dep={nome_deputado_url}&dataInicio={INITIAL_DATE_DEPUTY_SPEECH_SEARCH}&dataFim={FINAL_DATE_DEPUTY_SPEECH_SEARCH}"
     response_deputado = requests.get(url_deputado)
     soup = BeautifulSoup(response_deputado.text, 'html.parser')
 
@@ -95,7 +101,7 @@ for deputado in deputados_data['dados'][skipDeputados:]:
                     {"video_param": video_param, "mp4_url": mp4_url})
 
         resultados.append(evento)
-#for testing
+# for testing
     json_filename = f'speechs/{nome_deputado.replace(" ", "-").lower()}-{deputado["id"]}.json'
     with open(json_filename, 'w', encoding='utf-8') as f:
         json.dump(resultados, f, ensure_ascii=False, indent=4)
